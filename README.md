@@ -1,6 +1,7 @@
 # Fast JSON API — :warning: This project is no longer maintained!!!! :warning:
 
 [![Build Status](https://travis-ci.org/Netflix/fast_jsonapi.svg?branch=master)](https://travis-ci.org/Netflix/fast_jsonapi)
+[![CI](https://github.com/mina-negishi/fast_jsonapi/actions/workflows/ci.yml/badge.svg)](https://github.com/mina-negishi/fast_jsonapi/actions/workflows/ci.yml)
 
 A lightning fast [JSON:API](http://jsonapi.org/) serializer for Ruby Objects.
 

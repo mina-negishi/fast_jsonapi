@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     
     strategy:
+      fail-fast: false
       matrix:
         ruby-version: ['2.2.9', '2.3.6', '2.4.3', '2.5.0']
     
@@ -29,3 +30,9 @@ jobs:
     
     - name: Run tests
       run: bundle exec rspec
+    
+    - name: Run performance tests (Ruby 2.5.0 only)
+      if: matrix.ruby-version == '2.5.0'
+      run: bundle exec rspec spec --tag performance:true
+      env:
+        GITHUB_ACTIONS: false
