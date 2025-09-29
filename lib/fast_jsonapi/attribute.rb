@@ -11,7 +11,32 @@ module FastJsonapi
     def serialize(record, serialization_params, output_hash)
       if include_attribute?(record, serialization_params)
         output_hash[key] = if method.is_a?(Proc)
-          method.arity.abs == 1 ? method.call(record) : method.call(record, serialization_params)
+          # Handle based on method arity to avoid ArgumentError
+          case method.arity
+          when 1
+            # Proc expects exactly 1 argument
+            method.call(record)
+          when 2
+            # Proc expects exactly 2 arguments
+            method.call(record, serialization_params)
+          when -1
+            # Proc accepts variable arguments (*args) - try with 2 first
+            begin
+              method.call(record, serialization_params)
+            rescue ArgumentError
+              method.call(record)
+            end
+          when -2
+            # Proc has 1 required + variable args (record, *args) - safe to call with 2
+            method.call(record, serialization_params)
+          else
+            # For other arity values, try 2 args first, fallback to 1 if ArgumentError
+            begin
+              method.call(record, serialization_params)
+            rescue ArgumentError
+              method.call(record)
+            end
+          end
         else
           record.public_send(method)
         end
