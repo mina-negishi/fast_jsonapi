@@ -33,7 +33,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency(%q<bundler>, [">= 1.17", "< 3"])
   gem.add_development_dependency(%q<byebug>, [">= 0"])
   gem.add_development_dependency(%q<active_model_serializers>, ["~> 0.10.7"])
-  gem.add_development_dependency(%q<sqlite3>, ["~> 1.3"])
+  gem.add_development_dependency(%q<sqlite3>, [">= 2.1"])
   gem.add_development_dependency(%q<jsonapi-rb>, ["~> 0.5.0"])
   gem.add_development_dependency(%q<jsonapi-serializers>, ["~> 1.0.0"])
 end
