@@ -20,15 +20,21 @@ module FastJsonapi
             # Proc expects exactly 2 arguments
             method.call(record, serialization_params)
           when -1
-            # Proc accepts variable arguments (*args) - try with 2 first
+            # Proc accepts variable arguments (*args) - try with 2 first, fallback to 1
             begin
               method.call(record, serialization_params)
             rescue ArgumentError
               method.call(record)
             end
           when -2
-            # Proc has 1 required + variable args (record, *args) - safe to call with 2
-            method.call(record, serialization_params)
+            # Proc has 1 required + variable args (record, *args)
+            # But symbol-to-proc (&:method) also has arity -2 and expects only 1 arg
+            # Try with 1 argument first for symbol-to-proc compatibility
+            begin
+              method.call(record)
+            rescue ArgumentError
+              method.call(record, serialization_params)
+            end
           else
             # For other arity values, try 2 args first, fallback to 1 if ArgumentError
             begin
