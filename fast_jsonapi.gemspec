@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency(%q<activesupport>, [">= 4.2"])
   gem.add_development_dependency(%q<activerecord>, [">= 4.2"])
-  gem.add_development_dependency(%q<skylight>, ["~> 1.3"])
+  gem.add_development_dependency(%q<skylight>, ["~> 5.0"])
   gem.add_development_dependency(%q<rspec>, ["~> 3.5.0"])
   gem.add_development_dependency(%q<oj>, ["~> 3.3"])
   gem.add_development_dependency(%q<rspec-benchmark>, ["~> 0.3.0"])
