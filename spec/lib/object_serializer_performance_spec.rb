@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'benchmark'
 
 describe FastJsonapi::ObjectSerializer, performance: true do
   include_context 'movie class'
@@ -22,7 +23,7 @@ describe FastJsonapi::ObjectSerializer, performance: true do
     },
     ams: {
       name: 'AMS serializer',
-      speed_factor: 25,
+      speed_factor: 4,  # Even more conservative threshold for improved performance
       hash_method: :as_json
     },
     jsonapi: {

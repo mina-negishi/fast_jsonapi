@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.name = "fast_jsonapi"
   gem.version = FastJsonapi::VERSION
 
-  gem.required_ruby_version = '>= 2.0.0' if gem.respond_to? :required_ruby_version=
+  gem.required_ruby_version = '>= 2.7.0' if gem.respond_to? :required_ruby_version=
   gem.required_rubygems_version = Gem::Requirement.new(">= 0") if gem.respond_to? :required_rubygems_version=
   gem.metadata = { "allowed_push_host" => "https://rubygems.org" } if gem.respond_to? :metadata=
   gem.require_paths = ["lib"]
@@ -25,15 +25,16 @@ Gem::Specification.new do |gem|
   gem.summary = "fast JSON API(jsonapi.org) serializer"
 
   gem.add_runtime_dependency(%q<activesupport>, [">= 4.2"])
+  gem.add_runtime_dependency(%q<json>, ["2.15.0"])
   gem.add_development_dependency(%q<activerecord>, [">= 4.2"])
-  gem.add_development_dependency(%q<skylight>, ["~> 1.3"])
+  gem.add_development_dependency(%q<skylight>, ["~> 5.0"])
   gem.add_development_dependency(%q<rspec>, ["~> 3.5.0"])
   gem.add_development_dependency(%q<oj>, ["~> 3.3"])
-  gem.add_development_dependency(%q<rspec-benchmark>, ["~> 0.3.0"])
-  gem.add_development_dependency(%q<bundler>, ["~> 1.0"])
+  gem.add_development_dependency(%q<rspec-benchmark>, ["~> 0.6.0"])
+  gem.add_development_dependency(%q<bundler>, [">= 1.17", "< 3"])
   gem.add_development_dependency(%q<byebug>, [">= 0"])
   gem.add_development_dependency(%q<active_model_serializers>, ["~> 0.10.7"])
-  gem.add_development_dependency(%q<sqlite3>, ["~> 1.3"])
+  gem.add_development_dependency(%q<sqlite3>, [">= 2.1"])
   gem.add_development_dependency(%q<jsonapi-rb>, ["~> 0.5.0"])
   gem.add_development_dependency(%q<jsonapi-serializers>, ["~> 1.0.0"])
 end
