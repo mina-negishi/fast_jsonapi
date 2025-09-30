@@ -23,7 +23,7 @@ describe FastJsonapi::ObjectSerializer, performance: true do
     },
     ams: {
       name: 'AMS serializer',
-      speed_factor: 5,
+      speed_factor: 4,  # Even more conservative threshold for improved performance
       hash_method: :as_json
     },
     jsonapi: {

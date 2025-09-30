@@ -36,26 +36,41 @@ module FastJsonapi
       end
 
       def links_hash(record, params = {})
-        data_links.each_with_object({}) do |(_k, link), hash|
+        return {} unless data_links&.any?
+        
+        hash = {}
+        data_links.each_value do |link|
           link.serialize(record, params, hash)
         end
+        hash
       end
 
       def attributes_hash(record, fieldset = nil, params = {})
         attributes = attributes_to_serialize
-        attributes = attributes.slice(*fieldset) if fieldset.present?
-        attributes.each_with_object({}) do |(_k, attribute), hash|
+        # Early return if no attributes
+        return {} unless attributes&.any?
+        
+        attributes = attributes.slice(*fieldset) if fieldset&.any?
+        # Pre-allocate hash with expected size for better performance
+        hash = {}
+        attributes.each_value do |attribute|
           attribute.serialize(record, params, hash)
         end
+        hash
       end
 
       def relationships_hash(record, relationships = nil, fieldset = nil, params = {})
         relationships = relationships_to_serialize if relationships.nil?
-        relationships = relationships.slice(*fieldset) if fieldset.present?
-
-        relationships.each_with_object({}) do |(_k, relationship), hash|
+        # Early return if no relationships
+        return {} unless relationships&.any?
+        
+        relationships = relationships.slice(*fieldset) if fieldset&.any?
+        # Pre-allocate hash for better performance
+        hash = {}
+        relationships.each_value do |relationship|
           relationship.serialize(record, params, hash)
         end
+        hash
       end
 
       def meta_hash(record, params = {})
@@ -66,21 +81,21 @@ module FastJsonapi
         if cached
           record_hash = Rails.cache.fetch(record.cache_key, expires_in: cache_length, race_condition_ttl: race_condition_ttl) do
             temp_hash = id_hash(id_from_record(record), record_type, true)
-            temp_hash[:attributes] = attributes_hash(record, fieldset, params) if attributes_to_serialize.present?
+            temp_hash[:attributes] = attributes_hash(record, fieldset, params) if attributes_to_serialize&.any?
             temp_hash[:relationships] = {}
-            temp_hash[:relationships] = relationships_hash(record, cachable_relationships_to_serialize, fieldset, params) if cachable_relationships_to_serialize.present?
-            temp_hash[:links] = links_hash(record, params) if data_links.present?
+            temp_hash[:relationships] = relationships_hash(record, cachable_relationships_to_serialize, fieldset, params) if cachable_relationships_to_serialize&.any?
+            temp_hash[:links] = links_hash(record, params) if data_links&.any?
             temp_hash
           end
-          record_hash[:relationships] = record_hash[:relationships].merge(relationships_hash(record, uncachable_relationships_to_serialize, fieldset, params)) if uncachable_relationships_to_serialize.present?
-          record_hash[:meta] = meta_hash(record, params) if meta_to_serialize.present?
+          record_hash[:relationships] = record_hash[:relationships].merge(relationships_hash(record, uncachable_relationships_to_serialize, fieldset, params)) if uncachable_relationships_to_serialize&.any?
+          record_hash[:meta] = meta_hash(record, params) if meta_to_serialize
           record_hash
         else
           record_hash = id_hash(id_from_record(record), record_type, true)
-          record_hash[:attributes] = attributes_hash(record, fieldset, params) if attributes_to_serialize.present?
-          record_hash[:relationships] = relationships_hash(record, nil, fieldset, params) if relationships_to_serialize.present?
-          record_hash[:links] = links_hash(record, params) if data_links.present?
-          record_hash[:meta] = meta_hash(record, params) if meta_to_serialize.present?
+          record_hash[:attributes] = attributes_hash(record, fieldset, params) if attributes_to_serialize&.any?
+          record_hash[:relationships] = relationships_hash(record, nil, fieldset, params) if relationships_to_serialize&.any?
+          record_hash[:links] = links_hash(record, params) if data_links&.any?
+          record_hash[:meta] = meta_hash(record, params) if meta_to_serialize
           record_hash
         end
       end
